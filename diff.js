@@ -2,5 +2,30 @@
 import { buildSet } from "./sets.js";
 
 export function symmetricDiff(left, right) {
-  return { symmetric: [], both: 0, union: 0 };
+  const leftSet = buildSet(left);
+  const rightSet = buildSet(right);
+
+  let both = 0;
+  const symmetric = [];
+  for (const key of leftSet) {
+    if (rightSet.has(key)) {
+      both += 1;
+    } else {
+      symmetric.push(key);
+    }
+  }
+  for (const key of rightSet) {
+    if (!leftSet.has(key)) {
+      symmetric.push(key);
+    }
+  }
+
+  symmetric.sort();
+
+  return {
+    symmetric: symmetric,
+    count: symmetric.length,
+    both: both,
+    union: leftSet.size + rightSet.size - both
+  };
 }
